@@ -19,7 +19,8 @@ greenhousepc = pd.read_excel('greenhousepc.xlsx',sheet_name = 'Folha1',header= 1
 pop_density = pd.read_excel('pop_density.xlsx',sheet_name = 'Folha1',header= 1)
 pop_poverty_risk = pd.read_excel('pop_risco_pobreza.xlsx',sheet_name = 'Folha1',header= 1)
 precipitation = pd.read_excel('precipitation.xlsx', sheet_name = 'Folha1', header= 1)
-
+inflation = pd.read_excel('inflation_CPI.xlsx', sheet_name = 'Folha1', header= 1)
+div_per_100_marriges_ = pd.read_excel('div_per_100_marriges_.xlsx', sheet_name = 'Folha1', header= 1)
 
 population_struct = pd.read_excel('estrutura_populacao.xlsx', sheet_name = 'Folha1', header = 1)
 #Splitting pop struct by age group
@@ -53,9 +54,9 @@ variables = [health_expenses,education,gdp_per_capita,gini_index,greenhousepc,po
              productivity_per_hour,remuneration_per_capita,unemployment,co_emission_per_capita] 
 
 variables_with_no_poppov = [health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density, precipitation,
-             productivity_per_hour,remuneration_per_capita,unemployment]+ pop_l
+             productivity_per_hour,remuneration_per_capita,unemployment,inflation,div_per_100_marriges_]+ pop_l
                             
-st = 'health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density,precipitation,productivity_per_hour,remuneration_per_capita,unemployment,'
+st = 'health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density,precipitation,productivity_per_hour,remuneration_per_capita,unemployment,inflation,div_per_100_marriges_,'
 st = st + ','.join(age_groups)
 var_names = st.split(',')
 
