@@ -50,13 +50,13 @@ prevalence_of_depression = prevalence_of_depression.rename(index=str, columns={"
 prevalence_of_depression.drop('Code', axis = 1, inplace = True)
 prevalence_of_depression.set_index(['year','country'],inplace =True, drop = True)
 
-variables = [health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density, pop_poverty_risk, precipitation,
+variables = [health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density, pop_poverty_risk, 
              productivity_per_hour,remuneration_per_capita,unemployment,co_emission_per_capita] 
 
-variables_with_no_poppov = [health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density, precipitation,
+variables_with_no_poppov = [health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density, 
              productivity_per_hour,remuneration_per_capita,unemployment,inflation,div_per_100_marriges_]+ pop_l
                             
-st = 'health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density,precipitation,productivity_per_hour,remuneration_per_capita,unemployment,inflation,div_per_100_marriges_,'
+st = 'health_expenses,education,gdp_per_capita,gini_index,greenhousepc,pop_density,productivity_per_hour,remuneration_per_capita,unemployment,inflation,div_per_100_marriges_,'
 st = st + ','.join(age_groups)
 var_names = st.split(',')
 
