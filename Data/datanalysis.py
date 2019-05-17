@@ -1,4 +1,4 @@
-import pandas as pd
+﻿import pandas as pd
 import numpy as np
 import re
 import seaborn as sb
@@ -132,28 +132,166 @@ for i in range(13,18): total=total + df.iloc[:,i]
 df['total']=total
 
 #joining into the following age groups: 0-24,25-64,64+
-df['0-24(%)']=df.iloc[:,12]+df.iloc[:,13]
-df['25-64(%)']=df.iloc[:,14]+df.iloc[:,15]
-df['65+(%)']=df.iloc[:,16]+df.iloc[:,17]
+df['ageGroup_0-24']=df.iloc[:,12]+df.iloc[:,13]
+df['ageGroup_25-64']=df.iloc[:,14]+df.iloc[:,15]
+df['ageGroup_65_more']=df.iloc[:,16]+df.iloc[:,17]
 
 #turning the age groups into percentage:
-df['0-24(%)']=df['0-24(%)']/df['total']
-df['25-64(%)']=df['25-64(%)']/df['total']
-df['65+(%)']=df['65+(%)']/df['total']
+df['ageGroup_0-24']=df['ageGroup_0-24']/df['total']
+df['ageGroup_25-64']=df['ageGroup_25-64']/df['total']
+df['ageGroup_65_more']=df['ageGroup_65_more']/df['total']
 
 #dropping unecessary columns
 drop_col=[df.iloc[:,i].name for i in range(12,18)]
 drop_col.append('total')
 df.drop(columns=drop_col,inplace=True)
 
-#Correlation
-corr=df.drop(columns=['year','country']).corr()
-# =============================================================================
-# 
-# ASSUMPTIONS OF LINEAR REGRESSION:
-# 
-# =============================================================================
+df['year']=df['year'].map(lambda x: int(str(x)[-2::])+1)
+df.rename(columns={'All ages (%)':'depression_rate','div_per_100_marriges_':'divorce_p_100_marriges','Per capita CO₂ emissions (Global Carbon Project; Gapminder; UN) (tonnes per capita)':'CO2_emissions'},inplace=True)
 
+
+df.to_csv('ready_df')
+# =============================================================================
+# 
+# 
+# import seaborn as sns; sns.set()
+# 
+# # Generate a mask for the upper triangle
+# mask = np.zeros_like(corr, dtype=np.bool)
+# mask[np.triu_indices_from(mask)] = True
+# 
+# # Set up the matplotlib figure
+# f, ax = plt.subplots(figsize=(11, 9))
+# 
+# # Generate a custom diverging colormap
+# cmap = sb.diverging_palette(220, 10, as_cmap=True)
+# 
+# # Draw the heatmap with the mask and correct aspect ratio
+# sns_plot=sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
+#             square=True, linewidths=.5, cbar_kws={"shrink": .5})
+# 
+# sns_plot.figure.savefig('visualizations/'+'overall'+'_corr'+".png")
+# plt.clf()
+# 
+# 
+# 
+# 
+# # =============================================================================
+# # 
+# # ASSUMPTIONS OF LINEAR REGRESSION:
+# # 
+# # =============================================================================
+# import statsmodels.api as sm
+# from matplotlib import pyplot as plt
+# from sklearn.preprocessing import MinMaxScaler
+# from scipy.stats import boxcox
+# from scipy.stats import shapiro  as shap
+# 
+# data=df.copy()
+# data['All ages (%)'] = sm.add_constant(data['All ages (%)'])
+# mod_fit = sm.OLS(data['All ages (%)'], data['All ages (%)']).fit()
+# res = mod_fit.resid # residuals
+# fig = sm.qqplot(res)
+# plt.show()
+# 
+# #cube root transformation
+# sb.distplot(df['All ages (%)'] ** (1. / 3))
+# #Square transformation
+# sb.distplot(df['All ages (%)'] ** 2)
+# #log transformation:
+# sb.distplot(np.log(df['All ages (%)']))
+# #square root transformation:
+# sb.distplot(np.sqrt(df['All ages (%)']))
+# # min max scaling
+# scaler = MinMaxScaler()
+# fitted=scaler.fit_transform(df['All ages (%)'].values.reshape(-1, 1))
+# sb.distplot(fitted)
+# #boxcox of the exponential
+# sb.distplot(boxcox(np.exp(df['All ages (%)']),0))
+# 
+# #exponential transformation:
+# sb.distplot(np.exp(df['All ages (%)']))
+# 
+# #shapiro wilk test:
+# shap(np.sqrt(df['All ages (%)']))[1]<0.05
+# 
+# for year_ in np.unique(final_df.year):
+#     sns_plot = sns.scatterplot(x=var, y=dependent_variable, data=dt)
+#     sns_plot.figure.savefig('scatters/'+dependent_variable+'_'+var+'_'+str(year_)+".png")
+#     plt.clf()
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# import matplotlib.pyplot as plt
+# 
+# numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+# 
+# independent_variables = list(df.select_dtypes(include=numerics).columns)
+# independent_variables.remove('All ages (%)')
+# dependent_variable = 'All ages (%)'
+# 
+# for var in independent_variables:
+#     for year_ in np.unique(final_df.year):
+#         dt=df[df.year==year_]
+#         sns_plot = sns.scatterplot(x=var, y=dependent_variable, data=dt)
+#         sns_plot.figure.savefig('scatters/'+dependent_variable+'_'+var+'_'+str(year_)+".png")
+#         plt.clf()
+# 
+# 
+# for var in independent_variables:
+#     sns_plot = sns.distplot(df[var])
+#     sns_plot.figure.savefig('histograms/'+'_'+var+".png")
+#     plt.clf()
+# 
+# for var in independent_variables:
+#     sns_plot = sns.scatterplot(data=df[var])
+#     sns_plot.figure.savefig('histograms/'+'_'+var+".png")
+#     plt.clf()
+#     
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# models=[]
+# summaries=[]
+# for year_ in np.unique(df.year):
+#    #filtering the year:
+#     temp=df[df.year==year_]
+#     #defining variables:
+#     X=temp.drop(columns=['country','year','All ages (%)'])
+#     X=sm.add_constant(X)    
+#     Y=temp['All ages (%)']
+#     #estimating the model:
+#     model=sm.OLS(Y,X).fit()
+#     #appending the summary:
+#     summaries.append(model)
+#     
+#     #appending results:
+#     temp_results=pd.DataFrame(columns=['coef','pvalue'],index=X.columns)
+#     temp_results['coef']=model.params
+#     temp_results['pvalue']=model.pvalues
+#     models.append(temp_results)
+# 
+# X=df.drop(columns=['country','year','All ages (%)'])
+# Y=df['All ages (%)']
+# model=sm.OLS(Y,X).fit()
+# model.summary()
+# 
+# 
+# 
+# =============================================================================
 
 import seaborn as sns; sns.set()
 import matplotlib.pyplot as plt
@@ -213,5 +351,3 @@ X=df.drop(columns=['country','year','All ages (%)'])
 Y=df['All ages (%)']
 model=sm.OLS(Y,X).fit()
 model.summary()
-
-
