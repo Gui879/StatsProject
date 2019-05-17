@@ -155,8 +155,6 @@ corr=df.drop(columns=['year','country']).corr()
 # =============================================================================
 
 
-
-
 import seaborn as sns; sns.set()
 import matplotlib.pyplot as plt
 
@@ -182,12 +180,14 @@ for var in independent_variables:
     sns_plot.figure.savefig('histograms/'+'_'+var+".png")
     plt.clf()
     
+from sklearn import datasets, linear_model
+from sklearn.linear_model import LinearRegression
+import statsmodels.api as sm
+from scipy import stats
 
-
-
-
-
-
+model = sm.OLS(df['All ages (%)'], df.drop(['All ages (%)','year', 'country'], axis =1))
+results = model.fit()
+print(results.summary())
 
 models=[]
 summaries=[]
